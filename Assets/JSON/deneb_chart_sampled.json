@@ -1,0 +1,134 @@
+{
+"notes": [
+
+  {"time": -0.077, "line": 2},
+
+  {"time": 1.034, "line": 1},
+
+  {"time": 2.033, "line": 0},
+  {"time": 2.033, "line": 2},
+
+  {"time": 2.904, "line": 0},
+  {"time": 2.904, "line": 2},
+
+  {"time": 4.091, "line": 1},
+
+  {"time": 5.023, "line": 1},
+  {"time": 5.223, "line": 0},
+  {"time": 5.423, "line": 1},
+  {"time": 5.623, "line": 0},
+
+  {"time": 5.951, "line": 0},
+
+  {"time": 6.978, "line": 0},
+  {"time": 7.178, "line": 1},
+  {"time": 7.378, "line": 0},
+  {"time": 7.578, "line": 1},
+
+  {"time": 8.073, "line": 1},
+  {"time": 8.073, "line": 0},
+
+  {"time": 8.914, "line": 2},
+  {"time": 8.914, "line": 0},
+
+  {"time": 10.05, "line": 1},
+  {"time": 10.05, "line": 0},
+
+  {"time": 11.096, "line": 2},
+  {"time": 11.096, "line": 1},
+
+  {"time": 12.035, "line": 2},
+  {"time": 12.035, "line": 1},
+
+  {"time": 13.063, "line": 2, "duration": 1.33},
+
+  {"time": 14.072, "line": 0},
+  {"time": 14.072, "line": 1},
+
+  {"time": 15.05, "line": 2},
+  {"time": 15.05, "line": 1},
+
+  {"time": 16.031, "line": 1},
+
+  {"time": 17.026, "line": 1},
+  {"time": 17.226, "line": 2},
+  {"time": 17.426, "line": 1},
+  {"time": 17.626, "line": 2},
+
+  {"time": 17.93, "line": 2},
+  {"time": 18.08, "line": 2},
+  {"time": 18.23, "line": 2},
+  {"time": 18.38, "line": 2},
+  {"time": 18.53, "line": 2},
+
+  {"time": 19.068, "line": 0, "duration": 0.5},
+
+  {"time": 19.916, "line": 1},
+
+  {"time": 20.991, "line": 0},
+
+  {"time": 22.087, "line": 2, "duration": 0.74},
+
+  {"time": 23.038, "line": 1},
+  {"time": 23.038, "line": 0},
+
+  {"time": 23.953, "line": 0},
+  {"time": 23.953, "line": 1},
+
+  {"time": 24.981, "line": 1},
+
+  {"time": 26.085, "line": 1},
+  {"time": 26.085, "line": 0},
+
+  {"time": 26.995, "line": 2},
+  {"time": 27.145, "line": 2},
+  {"time": 27.295, "line": 2},
+  {"time": 27.445, "line": 2},
+  {"time": 27.595, "line": 2},
+
+  {"time": 27.937, "line": 2},
+  {"time": 27.937, "line": 1},
+
+  {"time": 28.947, "line": 1},
+
+  {"time": 29.995, "line": 0},
+  {"time": 30.145, "line": 0},
+  {"time": 30.295, "line": 0},
+  {"time": 30.445, "line": 0},
+  {"time": 30.595, "line": 0},
+
+  {"time": 31.092, "line": 1},
+
+  {"time": 31.987, "line": 2},
+  {"time": 32.137, "line": 2},
+  {"time": 32.287, "line": 2},
+  {"time": 32.437, "line": 2},
+  {"time": 32.587, "line": 2},
+
+  {"time": 32.996, "line": 1},
+  {"time": 32.996, "line": 2},
+
+  {"time": 33.98, "line": 2},
+  {"time": 34.13, "line": 2},
+  {"time": 34.28, "line": 2},
+  {"time": 34.43, "line": 2},
+  {"time": 34.58, "line": 2},
+
+  {"time": 35.01, "line": 2},
+  {"time": 35.21, "line": 1},
+  {"time": 35.41, "line": 2},
+  {"time": 35.61, "line": 1},
+
+  {"time": 36.009, "line": 1},
+  {"time": 36.209, "line": 2},
+  {"time": 36.409, "line": 1},
+  {"time": 36.609, "line": 2},
+
+  {"time": 37.079, "line": 1, "duration": 0.67},
+
+  {"time": 38.055, "line": 0, "duration": 1.48},
+
+  {"time": 39.013, "line": 1},
+  {"time": 39.013, "line": 0}
+]
+}
