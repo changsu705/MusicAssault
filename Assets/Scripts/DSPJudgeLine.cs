@@ -1,57 +1,70 @@
-using System.Collections;
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 
-public class DSPNoteManager : MonoBehaviour
+public class DSPJudgeLine : MonoBehaviour
 {
-    public AudioSource audioSource;
-    public TextAsset chartJSON;
-    public GameObject notePrefab;
-    public Transform[] lanes;
-    public float fallDelay = 2f;
+    public KeyCode[] keys;
+    public JudgementWindow window;
+    public DSPNoteManager noteManager;
 
-    private NoteChart chart;
-    private int currentIndex = 0;
-    private double dspStartTime;
+    private List<INote> notesInZone = new List<INote>();
 
-    void Start()
-    {
-        chart = JsonUtility.FromJson<NoteChart>(chartJSON.text);
-
-        // 오디오 프리로딩이 필요할 경우
-        StartCoroutine(LoadAndScheduleAudio());
-    }
-
-    IEnumerator LoadAndScheduleAudio()
-    {
-        audioSource.clip.LoadAudioData();
-
-        while (audioSource.clip.loadState != AudioDataLoadState.Loaded)
-            yield return null;
-
-        dspStartTime = AudioSettings.dspTime + 1.0;
-        audioSource.PlayScheduled(dspStartTime);
-    }
 
     void Update()
     {
-        double now = AudioSettings.dspTime - dspStartTime;
+        if (notesInZone.Count == 0) return;
 
-        while (currentIndex < chart.notes.Count)
+        foreach (KeyCode key in keys)
         {
-            var note = chart.notes[currentIndex];
-            if (now >= note.time - fallDelay)
+            if (Input.GetKeyDown(key))
             {
-                Transform spawnPos = lanes[note.line];
-                GameObject obj = Instantiate(notePrefab, spawnPos.position, Quaternion.identity);
-                obj.GetComponent<Note>().targetTime = note.time;
-                currentIndex++;
+                INote closest = notesInZone[0];
+                double inputTime = noteManager.GetMusicTime();
+                double delta = Math.Abs(inputTime - closest.TargetTime);
+
+                if (delta <= window.perfect)
+                    Debug.Log("PERFECT");
+                else if (delta <= window.excellent)
+                    Debug.Log("EXCELLENT");
+                else if (delta <= window.good)
+                    Debug.Log("GOOD");
+                else
+                    Debug.Log("MISS");
+
+                // MonoBehaviour로 캐스팅 후 제거
+                MonoBehaviour mono = closest as MonoBehaviour;
+                if (mono != null)
+                    Destroy(mono.gameObject);
+
+                notesInZone.Remove(closest);
             }
-            else break;
         }
     }
 
-    public double GetMusicTime()
+    void OnTriggerEnter(Collider other)
     {
-        return AudioSettings.dspTime - dspStartTime;
+        var note = other.GetComponent<INote>();
+        if (note != null)
+            notesInZone.Add(note);
+    }
+
+
+    void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Note"))
+        {
+            INote note = other.GetComponent<INote>();
+            if (note != null && notesInZone.Contains(note))
+            {
+                Debug.Log("MISS (지남)");
+                notesInZone.Remove(note);
+
+                MonoBehaviour mono = note as MonoBehaviour;
+                if (mono != null)
+                    Destroy(mono.gameObject);
+            }
+        }
     }
 }
+// 나중에 의존성 역전법칙 적용하여 다시 코딩할 것 화요일 정도

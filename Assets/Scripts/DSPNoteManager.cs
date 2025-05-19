@@ -1,61 +1,79 @@
-using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DSPJudgeLine : MonoBehaviour
+public class DSPNoteManager : MonoBehaviour
 {
-    public KeyCode[] keys;
-    public JudgementWindow window;
-    public DSPNoteManager noteManager;
+    public AudioSource audioSource;
+    public TextAsset chartJSON;
+    public GameObject notePrefab;
+    public GameObject longNotePrefab;
+    public Transform[] lanes;
+    public float fallDelay = 2f;
 
-    private List<Note> notesInZone = new List<Note>();
+    private NoteChart chart;
+    private int currentIndex = 0;
+    private double dspStartTime;
+    private List<INote> activeNotes = new List<INote>();
+
+    void Start()
+    {
+        chart = JsonUtility.FromJson<NoteChart>(chartJSON.text);
+        StartCoroutine(LoadAndScheduleAudio());
+    }
+
+    IEnumerator LoadAndScheduleAudio()
+    {
+        audioSource.clip.LoadAudioData();
+        while (audioSource.clip.loadState != AudioDataLoadState.Loaded)
+            yield return null;
+
+        dspStartTime = AudioSettings.dspTime + 1.0;
+        audioSource.PlayScheduled(dspStartTime);
+    }
 
     void Update()
     {
-        if (notesInZone.Count == 0) return;
+        double now = AudioSettings.dspTime - dspStartTime;
 
-        foreach (KeyCode key in keys)
+        while (currentIndex < chart.notes.Count)
         {
-            if (Input.GetKeyDown(key))
+            var note = chart.notes[currentIndex];
+            if (now >= note.time - fallDelay)
             {
-                Note closest = notesInZone[0];
-                double inputTime = noteManager.GetMusicTime();
-                double delta = Math.Abs(inputTime - closest.targetTime);
+                if (note.line < 0 || note.line >= lanes.Length)
+                {
+                    Debug.LogWarning($"note.line {note.line} out of range.");
+                    currentIndex++;
+                    continue;
+                }
 
-                if (delta <= window.perfect)
-                    Debug.Log("PERFECT");
-                else if (delta <= window.excellent)
-                    Debug.Log("EXCELLENT");
-                else if (delta <= window.good)
-                    Debug.Log("GOOD");
+                GameObject obj = (note.duration > 0f)
+                    ? Instantiate(longNotePrefab, lanes[note.line].position, Quaternion.identity)
+                    : Instantiate(notePrefab, lanes[note.line].position, Quaternion.identity);
+
+                INote noteComponent = obj.GetComponent<INote>();
+                if (noteComponent != null)
+                {
+                    noteComponent.Initialize(note.time, note.duration);
+                    activeNotes.Add(noteComponent);
+                }
                 else
-                    Debug.Log("MISS");
+                {
+                    Debug.LogError("? INote 컴포넌트가 연결되지 않은 프리팹입니다.");
+                }
 
-                Destroy(closest.gameObject);
-                notesInZone.Remove(closest);
-                break;
+                currentIndex++;
             }
+            else break;
         }
+
+        foreach (var note in activeNotes)
+            note.Tick();
     }
 
-    void OnTriggerEnter(Collider other)
+    public double GetMusicTime()
     {
-        if (other.CompareTag("Note"))
-            notesInZone.Add(other.GetComponent<Note>());
-    }
-
-    void OnTriggerExit(Collider other)
-    {
-        if (other.CompareTag("Note"))
-        {
-            Note note = other.GetComponent<Note>();
-            if (notesInZone.Contains(note))
-            {
-                Debug.Log("MISS (지남)");
-                notesInZone.Remove(note);
-                Destroy(note.gameObject);
-            }
-        }
+        return AudioSettings.dspTime - dspStartTime;
     }
 }
-// 나중에 의존성 역전법칙 적용하여 다시 코딩할 것 화요일 정도
