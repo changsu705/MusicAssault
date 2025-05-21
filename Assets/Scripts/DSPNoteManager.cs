@@ -1,75 +1,85 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class DSPNoteManager : MonoBehaviour
 {
     public AudioSource audioSource;
     public TextAsset chartJSON;
-    public GameObject notePrefab;
+    public GameObject shootNotePrefab;
     public GameObject longNotePrefab;
     public Transform[] lanes;
     public float fallDelay = 2f;
+    public float preStartDelay = 5f;
+    public TextMeshProUGUI countdownText;
 
     private NoteChart chart;
     private int currentIndex = 0;
     private double dspStartTime;
     private List<INote> activeNotes = new List<INote>();
+    private bool gameStarted = false;
 
     void Start()
     {
-        chart = JsonUtility.FromJson<NoteChart>(chartJSON.text);
-        StartCoroutine(LoadAndScheduleAudio());
+        StartCoroutine(CountdownThenStart());
     }
 
-    IEnumerator LoadAndScheduleAudio()
+    IEnumerator CountdownThenStart()
     {
-        audioSource.clip.LoadAudioData();
-        while (audioSource.clip.loadState != AudioDataLoadState.Loaded)
-            yield return null;
+        float countdown = preStartDelay;
+        while (countdown > 0)
+        {
+            countdownText.text = Mathf.CeilToInt(countdown).ToString();
+            yield return new WaitForSeconds(1f);
+            countdown -= 1f;
+        }
 
-        dspStartTime = AudioSettings.dspTime + 1.0;
+        countdownText.text = "START!";
+        yield return new WaitForSeconds(1f);
+        countdownText.gameObject.SetActive(false);
+
+        chart = JsonUtility.FromJson<NoteChart>(chartJSON.text);
+        dspStartTime = AudioSettings.dspTime + fallDelay;
         audioSource.PlayScheduled(dspStartTime);
+        gameStarted = true;
     }
 
     void Update()
     {
+        if (!gameStarted)
+            return;
+
         double now = AudioSettings.dspTime - dspStartTime;
 
+        // 노트 생성
         while (currentIndex < chart.notes.Count)
         {
-            var note = chart.notes[currentIndex];
-            if (now >= note.time - fallDelay)
+            var noteData = chart.notes[currentIndex];
+            if (now >= noteData.time - fallDelay)
             {
-                if (note.line < 0 || note.line >= lanes.Length)
-                {
-                    Debug.LogWarning($"note.line {note.line} out of range.");
-                    currentIndex++;
-                    continue;
-                }
-
-                GameObject obj = (note.duration > 0f)
-                    ? Instantiate(longNotePrefab, lanes[note.line].position, Quaternion.identity)
-                    : Instantiate(notePrefab, lanes[note.line].position, Quaternion.identity);
-
+                Transform spawnPos = lanes[noteData.line];
+                GameObject prefab = noteData.duration > 0 ? longNotePrefab : shootNotePrefab;
+                GameObject obj = Instantiate(prefab, spawnPos.position, Quaternion.identity);
                 INote noteComponent = obj.GetComponent<INote>();
-                if (noteComponent != null)
-                {
-                    noteComponent.Initialize(note.time, note.duration);
-                    activeNotes.Add(noteComponent);
-                }
-                else
-                {
-                    Debug.LogError("? INote 컴포넌트가 연결되지 않은 프리팹입니다.");
-                }
-
+                noteComponent.Initialize(noteData.time, noteData.duration, noteData.line);
+                activeNotes.Add(noteComponent);
                 currentIndex++;
             }
             else break;
         }
 
-        foreach (var note in activeNotes)
-            note.Tick();
+        // Tick
+        for (int i = activeNotes.Count - 1; i >= 0; i--)
+        {
+            var mono = activeNotes[i] as MonoBehaviour;
+            if (mono == null)
+            {
+                activeNotes.RemoveAt(i);
+                continue;
+            }
+            activeNotes[i].Tick();
+        }
     }
 
     public double GetMusicTime()
