@@ -249,6 +249,7 @@ MonoBehaviour:
     good: 0.2
   noteManager: {fileID: 401800394}
   judgeLineIndex: 0
+  JudgeLineLight: {fileID: 2142784577}
   judgementText: {fileID: 1001190355}
 --- !u!1 &79471512
 GameObject:
@@ -462,7 +463,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &498352553
 Transform:
   m_ObjectHideFlags: 0
@@ -861,7 +862,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &834823740
 Transform:
   m_ObjectHideFlags: 0
@@ -1058,13 +1059,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 95c50e6c9c7313d40b1f1fdcb6f51f17, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inputKeys: 20000000
+  inputKeys: 6300000076000000620000006e0000006d000000
   window:
     perfect: 0.05
     excellent: 0.1
     good: 0.2
   noteManager: {fileID: 401800394}
   judgeLineIndex: 1
+  JudgeLineLight: {fileID: 834823739}
   judgementText: {fileID: 1001190355}
 --- !u!1 &963194225
 GameObject:
@@ -1759,6 +1761,7 @@ MonoBehaviour:
     good: 0.2
   noteManager: {fileID: 401800394}
   judgeLineIndex: 2
+  JudgeLineLight: {fileID: 498352552}
   judgementText: {fileID: 1001190355}
 --- !u!1 &1455304781
 GameObject:
@@ -2031,7 +2034,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2142784578
 Transform:
   m_ObjectHideFlags: 0

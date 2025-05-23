@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
+using UnityEditor.Build.Content;
 using UnityEngine;
 
 public class DSPJudgeLine : MonoBehaviour
@@ -15,6 +16,7 @@ public class DSPJudgeLine : MonoBehaviour
     private List<INote> notesInZone = new List<INote>();
     private LongNote activeHoldNote = null; // 현재 유지 중인 롱노트
     private bool isHolding = false;
+    public GameObject JudgeLineLight;
 
     public TextMeshProUGUI judgementText;
     private Coroutine judgementRoutine;
@@ -31,6 +33,7 @@ public class DSPJudgeLine : MonoBehaviour
 
             if (keyHeld)
             {
+                JudgeLineLight.gameObject.SetActive(true);
                 if (adjustedTime >= activeHoldNote.TargetTime + activeHoldNote.duration)
                 {
                     Debug.Log("LONG NOTE SUCCESS");
@@ -42,6 +45,7 @@ public class DSPJudgeLine : MonoBehaviour
             }
             else if (isHolding) // 키를 놓은 경우 실패 처리
             {
+                JudgeLineLight.gameObject.SetActive(false);
                 Debug.Log("LONG NOTE MISS (중간에 놓음)");
                 notesInZone.Remove(activeHoldNote);
                 Destroy((activeHoldNote as MonoBehaviour).gameObject);
@@ -49,12 +53,12 @@ public class DSPJudgeLine : MonoBehaviour
                 isHolding = false;
             }
         }
-
         // 입력 판정 (숏노트, 롱노트 시작)
         foreach (var key in inputKeys)
-        {
+        {     
             if (Input.GetKeyDown(key))
             {
+                JudgeLineLight.SetActive(true);
                 INote closest = notesInZone
                     .Where(n => n.Line == judgeLineIndex)
                     .OrderBy(n => Math.Abs(adjustedTime - n.TargetTime))
@@ -86,6 +90,13 @@ public class DSPJudgeLine : MonoBehaviour
                 }
 
                 break;
+            }
+            if (Input.GetKey(key)) 
+            {
+            }
+            else
+            {
+                JudgeLineLight.SetActive(false);
             }
         }
     }
