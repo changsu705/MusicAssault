@@ -33,7 +33,6 @@ public class DSPJudgeLine : MonoBehaviour
 
             if (keyHeld)
             {
-                JudgeLineLight.gameObject.SetActive(true);
                 if (adjustedTime >= activeHoldNote.TargetTime + activeHoldNote.duration)
                 {
                     Debug.Log("LONG NOTE SUCCESS");
@@ -91,13 +90,15 @@ public class DSPJudgeLine : MonoBehaviour
 
                 break;
             }
-            if (Input.GetKey(key)) 
+            if (Input.GetKey(key))
             {
+                JudgeLineLight.SetActive(true);
             }
             else
             {
                 JudgeLineLight.SetActive(false);
             }
+
         }
     }
 
