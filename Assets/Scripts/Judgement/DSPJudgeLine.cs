@@ -19,6 +19,7 @@ public class DSPJudgeLine : MonoBehaviour
     public GameObject JudgeLineLight;
 
     public TextMeshProUGUI judgementText;
+    public TextMeshProUGUI scoreText;
     private Coroutine judgementRoutine;
 
     void Update()
@@ -67,16 +68,20 @@ public class DSPJudgeLine : MonoBehaviour
 
                 double delta = Math.Abs(adjustedTime - closest.TargetTime);
 
+                double score = (delta / 100) * window.maxScore ;
+
+                string judge;
                 if (delta <= window.perfect)
-                    ShowJudgement("PERFECT");
+                    judge = "PERFECT";
                 else if (delta <= window.excellent)
-                    ShowJudgement("EXCELLENT");
+                    judge = "EXCELLENT";
                 else if (delta <= window.good)
-                    ShowJudgement("GOOD");
+                    judge = "GOOD";
                 else
-                    ShowJudgement("MISS");
+                    judge = "MISS";
                 Debug.Log($"[{key}] MISS - delta = {delta:F4}s (Target: {closest.TargetTime:F3}, Now: {adjustedTime:F3})");
 
+                ShowJudgement(judge, score);
                 if (closest is LongNote hold)
                 {
                     activeHoldNote = hold;
@@ -127,16 +132,18 @@ public class DSPJudgeLine : MonoBehaviour
         }
     }
 
-    void ShowJudgement(string text)
+    void ShowJudgement(string text, double score)
     {
         if (judgementRoutine != null)
             StopCoroutine(judgementRoutine);
 
-        judgementRoutine = StartCoroutine(DisplayJudgement(text));
+        judgementRoutine = StartCoroutine(DisplayJudgement(text, score));
+
     }
-    IEnumerator DisplayJudgement(string text)
+    IEnumerator DisplayJudgement(string text, double score)
     {
-        judgementText.text = text;
+        judgementText.text = text ;
+        scoreText.text = (string)score;
         judgementText.gameObject.SetActive(true);
         yield return new WaitForSeconds(1.0f);
         judgementText.gameObject.SetActive(false);
