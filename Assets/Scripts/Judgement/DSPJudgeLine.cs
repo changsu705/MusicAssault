@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
-using UnityEditor.Build.Content;
+
 using UnityEngine;
 
 public class DSPJudgeLine : MonoBehaviour
@@ -19,7 +19,6 @@ public class DSPJudgeLine : MonoBehaviour
     public GameObject JudgeLineLight;
 
     public TextMeshProUGUI judgementText;
-    public TextMeshProUGUI scoreText;
     private Coroutine judgementRoutine;
 
     void Update()
@@ -68,8 +67,6 @@ public class DSPJudgeLine : MonoBehaviour
 
                 double delta = Math.Abs(adjustedTime - closest.TargetTime);
 
-                double score = (delta / 100) * window.maxScore ;
-
                 string judge;
                 if (delta <= window.perfect)
                     judge = "PERFECT";
@@ -78,10 +75,26 @@ public class DSPJudgeLine : MonoBehaviour
                 else if (delta <= window.good)
                     judge = "GOOD";
                 else
+                {
                     judge = "MISS";
+                    DSPHealthManager.Instance.ApplyMissDamage();
+                }
+
                 Debug.Log($"[{key}] MISS - delta = {delta:F4}s (Target: {closest.TargetTime:F3}, Now: {adjustedTime:F3})");
 
-                ShowJudgement(judge, score);
+                double maxDelta = window.good;
+                double clampedDelta = Math.Min(delta, maxDelta);
+                double rawScore = Math.Max(0, (1.0 - (clampedDelta / maxDelta)) * window.maxScore);
+
+                double cutScore = Mathf.FloorToInt((float)(rawScore / 100)) * 100;
+
+                bool isMiss = judge == "MISS";
+
+                DSPScoreManager.Instance.AddScore(cutScore, isMiss);
+
+                ShowJudgement(judge);
+
+
                 if (closest is LongNote hold)
                 {
                     activeHoldNote = hold;
@@ -120,6 +133,8 @@ public class DSPJudgeLine : MonoBehaviour
         if (note != null && notesInZone.Contains(note))
         {
             Debug.Log($"MISS (Áö³²)");
+            DSPHealthManager.Instance.ApplyMissDamage();
+            ShowJudgement("MISS");
             notesInZone.Remove(note);
             if ((object)note != (object)activeHoldNote)
                 Destroy((note as MonoBehaviour).gameObject);
@@ -132,20 +147,20 @@ public class DSPJudgeLine : MonoBehaviour
         }
     }
 
-    void ShowJudgement(string text, double score)
+    void ShowJudgement(string text )
     {
         if (judgementRoutine != null)
             StopCoroutine(judgementRoutine);
 
-        judgementRoutine = StartCoroutine(DisplayJudgement(text, score));
+        judgementRoutine = StartCoroutine(DisplayJudgement(text));
 
     }
-    IEnumerator DisplayJudgement(string text, double score)
+    IEnumerator DisplayJudgement(string text )
     {
-        judgementText.text = text ;
-        scoreText.text = (string)score;
+        judgementText.text = text;
         judgementText.gameObject.SetActive(true);
         yield return new WaitForSeconds(1.0f);
         judgementText.gameObject.SetActive(false);
     }
+
 }
