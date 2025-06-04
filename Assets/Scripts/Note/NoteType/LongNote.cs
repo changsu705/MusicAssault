@@ -6,38 +6,44 @@ public class LongNote : MonoBehaviour, INote
     public float duration;
     public float speed = 5f;
     public Transform body;
-    private Vector3 startPos;
-    private double spawnDSPTime;
-    public int Line { get; private set; }
 
     public float TargetTime => targetTime;
+    private bool isHolding = false;
+    private float holdStartTime;
 
-    public void Initialize(float time, float duration = 0f, int line = 0)
+    public void Initialize(float time, float duration = 0f)
     {
         targetTime = time;
         this.duration = duration;
-        Line = line;
-        startPos = transform.position;
-        spawnDSPTime = AudioSettings.dspTime;
 
         float length = speed * duration;
-        if (body != null)
-        {
-            body.localScale = new Vector3(0.1f, 1, length);
-            body.localPosition = new Vector3(0, 0, length / 2f);
-        }
+        body.localScale = new Vector3(1, 1, length);
+        body.localPosition = new Vector3(0, 0, length / 2f);
+    }
+
+    public void StartHold()
+    {
+        isHolding = true;
+        holdStartTime = Time.time;
+    }
+
+    public void EndHold()
+    {
+        isHolding = false;
+        Destroy(gameObject);
     }
 
     public void Tick()
     {
-        double now = AudioSettings.dspTime;
-        double elapsed = now - spawnDSPTime;
-        float moved = (float)(elapsed * speed);
-        transform.position = startPos + Vector3.back * moved;
-    }
+        transform.Translate(Vector3.back * speed * Time.deltaTime);
 
-    public void SetSpawnTime(double dspTime)
-    {
-        spawnDSPTime = dspTime;
+        if (isHolding)
+        {
+            float elapsed = Time.time - holdStartTime;
+            float remain = Mathf.Max(0f, duration - elapsed);
+            float length = speed * remain;
+            body.localScale = new Vector3(1, 1, length);
+            body.localPosition = new Vector3(0, 0, length / 2f);
+        }
     }
 }

@@ -21,6 +21,13 @@ public class DSPJudgeLine : MonoBehaviour
     public TextMeshProUGUI judgementText;
     private Coroutine judgementRoutine;
 
+    public MaterialEffectManager effectManager;
+    public Renderer targetRenderer;
+    public Material redMaterial;       // 잠깐 교체할 빨간색
+    public Material restoreMaterial;   // 교체 후 돌아올 머티리얼
+    public Transform shakeTarget;
+
+
     void Update()
     {
         double now = noteManager.GetMusicTime();
@@ -78,6 +85,7 @@ public class DSPJudgeLine : MonoBehaviour
                 {
                     judge = "MISS";
                     DSPHealthManager.Instance.ApplyMissDamage();
+                    TriggerEffect();
                 }
 
                 Debug.Log($"[{key}] MISS - delta = {delta:F4}s (Target: {closest.TargetTime:F3}, Now: {adjustedTime:F3})");
@@ -135,6 +143,7 @@ public class DSPJudgeLine : MonoBehaviour
             Debug.Log($"MISS (지남)");
             DSPHealthManager.Instance.ApplyMissDamage();
             ShowJudgement("MISS");
+            TriggerEffect();
             notesInZone.Remove(note);
             if ((object)note != (object)activeHoldNote)
                 Destroy((note as MonoBehaviour).gameObject);
@@ -162,5 +171,18 @@ public class DSPJudgeLine : MonoBehaviour
         yield return new WaitForSeconds(1.0f);
         judgementText.gameObject.SetActive(false);
     }
+
+    public void TriggerEffect()
+    {
+        effectManager.SwapMaterialWithShake(
+            targetRenderer,
+            redMaterial,
+            restoreMaterial,
+            shakeTarget,
+            1f,           // 지속 시간
+            0.1f          // 흔들 세기
+        );
+    }
+
 
 }

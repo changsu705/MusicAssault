@@ -3,10 +3,11 @@ using UnityEngine;
 public class AudioCube : MonoBehaviour
 {
     public GameObject sampleCubePrefab;
-    GameObject[] sampleCube = new GameObject[512];         //샘플 큐브 배열
+    GameObject[] sampleCube = new GameObject[128];         //샘플 큐브 배열
     public float maxScale = 1000;                           //큐브의 최대 크기
     public float initialXRotation = 90f;           // 처음에 X축으로 눕힐 각도
 public float yRotationSpeed = 30f;             // 지속 회전 속도 (Y축)
+    public Vector3 HaloScale = new Vector3(0.3f, 0.3f, 0.3f);
 
     void Start()
     {
@@ -30,7 +31,7 @@ public float yRotationSpeed = 30f;             // 지속 회전 속도 (Y축)
         }
 
         transform.rotation = Quaternion.Euler(initialXRotation, 0f, 0f);
-        transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
+        transform.localScale = HaloScale;
     }
 
 
@@ -45,7 +46,7 @@ public float yRotationSpeed = 30f;             // 지속 회전 속도 (Y축)
         if (sampleCube[i] != null)
         {
             sampleCube[i].transform.localScale
-                = new Vector3(10, (AudioPeer.samples[i] * maxScale) + 2, 10) * 0.1f;
+                = new Vector3(10, 10, (AudioPeer.samples[i] * maxScale) + 10) * 0.1f;
         }
     }
 }

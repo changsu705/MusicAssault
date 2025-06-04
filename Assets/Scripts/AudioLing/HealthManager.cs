@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class DSPHealthManager : MonoBehaviour
 {
@@ -38,7 +39,8 @@ public class DSPHealthManager : MonoBehaviour
         {
             isDead = true;
             healthText.text = "체력 0! 게임 오버 처리 필요";
-            // TODO: Game Over 처리
+            SceneManager.LoadScene("GameOver");
+
         }
         else
         {
