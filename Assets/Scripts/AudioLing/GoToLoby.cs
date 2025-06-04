@@ -9,4 +9,14 @@ public class GoToLoby : MonoBehaviour
     {
         SceneManager.LoadScene("Loby");
     }
+
+    void GoToDeneb()
+    {
+        SceneManager.LoadScene("Deneb");
+    }
+
+    void GoTotnshi()
+    {
+        SceneManager.LoadScene("tn-shi");
+    }
 }
