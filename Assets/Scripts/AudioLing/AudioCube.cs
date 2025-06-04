@@ -6,8 +6,9 @@ public class AudioCube : MonoBehaviour
     GameObject[] sampleCube = new GameObject[128];         //샘플 큐브 배열
     public float maxScale = 1000;                           //큐브의 최대 크기
     public float initialXRotation = 90f;           // 처음에 X축으로 눕힐 각도
-public float yRotationSpeed = 30f;             // 지속 회전 속도 (Y축)
+    public float yRotationSpeed = 30f;             // 지속 회전 속도 (Y축)
     public Vector3 HaloScale = new Vector3(0.3f, 0.3f, 0.3f);
+    public Vector3 HaloAngle = new Vector3(-15f, -180f, 0f);
 
     void Start()
     {
@@ -20,7 +21,7 @@ public float yRotationSpeed = 30f;             // 지속 회전 속도 (Y축)
             temp.transform.parent = this.transform;
 
             // 원형 배치
-            float angle = i * (360f / sampleCube.Length);
+            float angle = i * (360f / sampleCube.Length) + 30f;
             Vector3 pos = Quaternion.Euler(0, angle, 0) * Vector3.forward * radius;
             temp.transform.localPosition = pos;
 

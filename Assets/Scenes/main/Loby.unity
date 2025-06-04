@@ -865,7 +865,7 @@ MonoBehaviour:
   m_RendererIndex: -1
   m_VolumeLayerMask:
     serializedVersion: 2
-    m_Bits: 1
+    m_Bits: 65
   m_VolumeTrigger: {fileID: 0}
   m_VolumeFrameworkUpdateModeOption: 2
   m_RenderPostProcessing: 1
@@ -1169,10 +1169,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b55dc7f9e19038443ab0c3bd7849711d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sampleCubePrefab: {fileID: 7660444382103993634, guid: 809e37b5dad8e7442b06c882bb003823, type: 3}
+  sampleCubePrefab: {fileID: 7660444382103993634, guid: 94902ef9696d2ae4cbfbbcb283aee76f, type: 3}
   maxScale: 1000
   initialXRotation: 90
   yRotationSpeed: 30
+  HaloScale: {x: 0.02, y: 0.02, z: 0.02}
+  HaloAngle: {x: -15, y: -180, z: 0}
 --- !u!82 &1289523701
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1610,7 +1612,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1693530610}
   - component: {fileID: 1693530609}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Post-process Volume
   m_TagString: Untagged
   m_Icon: {fileID: 0}

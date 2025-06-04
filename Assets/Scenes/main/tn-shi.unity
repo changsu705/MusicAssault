@@ -2408,6 +2408,8 @@ MonoBehaviour:
   maxScale: 1000
   initialXRotation: 270
   yRotationSpeed: 10
+  HaloScale: {x: 0.3, y: 0.3, z: 0.3}
+  HaloAngle: {x: -15, y: -180, z: 0}
 --- !u!4 &1641077428
 Transform:
   m_ObjectHideFlags: 0
@@ -2456,7 +2458,7 @@ MonoBehaviour:
   priority: 0
   blendDistance: 0
   weight: 1
-  sharedProfile: {fileID: 11400000, guid: 7f58427047d65984b93ea782e9748c7d, type: 2}
+  sharedProfile: {fileID: 11400000, guid: c6c7dedfb7289174e93fec940d1612e6, type: 2}
 --- !u!4 &1641513142
 Transform:
   m_ObjectHideFlags: 0
