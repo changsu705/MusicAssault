@@ -8,8 +8,10 @@ public class LongNote : MonoBehaviour, INote
     public Transform body;
     private Vector3 startPos;
     private double spawnDSPTime;
-    public int Line { get; private set; }
+    private float holdStartTime;
+    private bool isHolding = false;
 
+    public int Line { get; private set; }
     public float TargetTime => targetTime;
 
     public void Initialize(float time, float duration = 0f, int line = 0)
@@ -28,12 +30,33 @@ public class LongNote : MonoBehaviour, INote
         }
     }
 
+    public void StartHold()
+    {
+        isHolding = true;
+        holdStartTime = Time.time;
+    }
+
+    public void EndHold()
+    {
+        isHolding = false;
+        Destroy(gameObject);
+    }
+
     public void Tick()
     {
         double now = AudioSettings.dspTime;
         double elapsed = now - spawnDSPTime;
         float moved = (float)(elapsed * speed);
         transform.position = startPos + Vector3.back * moved;
+
+        if (isHolding && body != null)
+        {
+            float holdElapsed = Time.time - holdStartTime;
+            float remain = Mathf.Max(0f, duration - holdElapsed);
+            float newLength = speed * remain;
+            body.localScale = new Vector3(0.1f, 1, newLength);
+            body.localPosition = new Vector3(0, 0, newLength / 2f);
+        }
     }
 
     public void SetSpawnTime(double dspTime)

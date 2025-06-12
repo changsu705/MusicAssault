@@ -26,6 +26,7 @@ public class TMPFader : MonoBehaviour
 
     IEnumerator FadeInAll()
     {
+        hasPlayed = true;
         float time = 0f;
 
         TMP.SetActive(false);
