@@ -1,5 +1,4 @@
 using UnityEngine;
-
 public class AudioCube : MonoBehaviour
 {
     public GameObject sampleCubePrefab;

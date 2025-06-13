@@ -55,7 +55,7 @@ public class AudioPeer : MonoBehaviour
         }
     }
 
-    void BandBuffer()
+    public void BandBuffer()
 {
     for (int i = 0; i < 8; i++)
     {
