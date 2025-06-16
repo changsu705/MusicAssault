@@ -5,17 +5,17 @@ using UnityEngine.SceneManagement;
 
 public class GoToLoby : MonoBehaviour
 {
-    void GoToMenu()
+    public void goToLoby()
     {
         SceneManager.LoadScene("Loby");
     }
 
-    void GoToDeneb()
+    public void goToDeneb()
     {
         SceneManager.LoadScene("Deneb");
     }
 
-    void GoTotnshi()
+    public void goTotnshi()
     {
         SceneManager.LoadScene("tn-shi");
     }
