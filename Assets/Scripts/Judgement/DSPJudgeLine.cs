@@ -140,19 +140,21 @@ public class DSPJudgeLine : MonoBehaviour
         var note = other.GetComponent<INote>();
         if (note != null && notesInZone.Contains(note))
         {
-            Debug.Log($"MISS (지남)");
+            // activeHoldNote이면 Update에서만 판정하도록 이쪽에서는 건드리지 않음
+            if ((object)note == (object)activeHoldNote)
+            {
+                // 단순히 리스트에서만 제거 (Update에서 판정할 것이므로)
+                notesInZone.Remove(note);
+                return;
+            }
+
+            // 숏노트는 MISS 처리
+            Debug.Log($"MISS (숏노트 지나감)");
             DSPHealthManager.Instance.ApplyMissDamage();
             ShowJudgement("MISS");
             TriggerEffect();
             notesInZone.Remove(note);
-            if ((object)note != (object)activeHoldNote)
-                Destroy((note as MonoBehaviour).gameObject);
-
-            if ((object)note == (object)activeHoldNote)
-            {
-                activeHoldNote = null;
-                isHolding = false;
-            }
+            Destroy((note as MonoBehaviour).gameObject);
         }
     }
 
