@@ -2358,7 +2358,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sampleCubePrefab: {fileID: 7660444382103993634, guid: 809e37b5dad8e7442b06c882bb003823, type: 3}
-  maxScale: 1000
+  maxScale: 600
   initialXRotation: 270
   yRotationSpeed: 10
   HaloScale: {x: 0.3, y: 0.3, z: 0.3}
@@ -2411,7 +2411,7 @@ MonoBehaviour:
   priority: 0
   blendDistance: 0
   weight: 1
-  sharedProfile: {fileID: 11400000, guid: 058f0cb19c3a0b44caaae249087b03cc, type: 2}
+  sharedProfile: {fileID: 11400000, guid: c6c7dedfb7289174e93fec940d1612e6, type: 2}
 --- !u!4 &1641513142
 Transform:
   m_ObjectHideFlags: 0
